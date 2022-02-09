@@ -4,14 +4,20 @@ import java.util.Date;
 
 public class ProcedureDto {
     private int patientsId;
-    private Date completionDate;
+    private int completionDate;
     private String proceduresName;
     private int appointedDoctorsId;
-    private String access;
+    private int access;
     private int performedUserId;
     private String specification;
 
-    public ProcedureDto(int patientsId, Date completionDate, String proceduresName, int appointedDoctorsId, String access, int performedUserId, String specification) {
+    public ProcedureDto(int patientsId,
+                        int completionDate,
+                        String proceduresName,
+                        int appointedDoctorsId,
+                        int access,
+                        int performedUserId,
+                        String specification) {
         this.patientsId = patientsId;
         this.completionDate = completionDate;
         this.proceduresName = proceduresName;
@@ -29,11 +35,11 @@ public class ProcedureDto {
         this.patientsId = patientsId;
     }
 
-    public Date getCompletionDate() {
+    public int getCompletionDate() {
         return completionDate;
     }
 
-    public void setCompletionDate(Date completionDate) {
+    public void setCompletionDate(int completionDate) {
         this.completionDate = completionDate;
     }
 
@@ -53,11 +59,11 @@ public class ProcedureDto {
         this.appointedDoctorsId = appointedDoctorsId;
     }
 
-    public String getAccess() {
+    public int getAccess() {
         return access;
     }
 
-    public void setAccess(String access) {
+    public void setAccess(int access) {
         this.access = access;
     }
 

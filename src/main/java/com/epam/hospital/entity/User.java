@@ -12,7 +12,16 @@ public class User {
     private int phoneNumber;
     private int roleId;
 
-    public User(int id, String login, String password, int departmentsId, String surname, String name, String patronymic, String specialisation, int phoneNumber, int roleId) {
+    public User(int id,
+                String login,
+                String password,
+                int departmentsId,
+                String surname,
+                String name,
+                String patronymic,
+                String specialisation,
+                int phoneNumber,
+                int roleId) {
         this.id = id;
         this.login = login;
         this.password = password;

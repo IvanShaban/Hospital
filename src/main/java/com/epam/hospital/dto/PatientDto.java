@@ -1,7 +1,5 @@
 package com.epam.hospital.dto;
 
-import java.util.Date;
-
 public class PatientDto {
     private int chambersId;
     private int doctorsId;
@@ -10,14 +8,26 @@ public class PatientDto {
     private String patronymic;
     private String provisionalDiagnosis;
     private String address;
-    private Date birthday;
+    private int birthday;
     private String status;
     private String bloodType;
     private String allergy;
-    private Date receiptDate;
-    private Date dischargeDate;
+    private int receiptDate;
+    private int dischargeDate;
 
-    public PatientDto(int chambersId, int doctorsId, String surname, String name, String patronymic, String provisionalDiagnosis, String address, Date birthday, String status, String bloodType, String allergy, Date receiptDate, Date dischargeDate) {
+    public PatientDto(int chambersId,
+                      int doctorsId,
+                      String surname,
+                      String name,
+                      String patronymic,
+                      String provisionalDiagnosis,
+                      String address,
+                      int birthday,
+                      String status,
+                      String bloodType,
+                      String allergy,
+                      int receiptDate,
+                      int dischargeDate) {
         this.chambersId = chambersId;
         this.doctorsId = doctorsId;
         this.surname = surname;
@@ -89,11 +99,11 @@ public class PatientDto {
         this.address = address;
     }
 
-    public Date getBirthday() {
+    public int getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(int birthday) {
         this.birthday = birthday;
     }
 
@@ -121,19 +131,19 @@ public class PatientDto {
         this.allergy = allergy;
     }
 
-    public Date getReceiptDate() {
+    public int getReceiptDate() {
         return receiptDate;
     }
 
-    public void setReceiptDate(Date receiptDate) {
+    public void setReceiptDate(int receiptDate) {
         this.receiptDate = receiptDate;
     }
 
-    public Date getDischargeDate() {
+    public int getDischargeDate() {
         return dischargeDate;
     }
 
-    public void setDischargeDate(Date dischargeDate) {
+    public void setDischargeDate(int dischargeDate) {
         this.dischargeDate = dischargeDate;
     }
 

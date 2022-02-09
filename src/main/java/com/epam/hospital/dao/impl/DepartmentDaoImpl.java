@@ -1,83 +1,72 @@
 package com.epam.hospital.dao.impl;
 
 import com.epam.hospital.dao.DepartmentDao;
+import com.epam.hospital.dao.connectionpool.ConnectionPool;
+import com.epam.hospital.dao.mapper.DepartmentMapper;
 import com.epam.hospital.dto.DepartmentDto;
 import com.epam.hospital.entity.Department;
 
 import java.sql.*;
 
 public class DepartmentDaoImpl implements DepartmentDao {
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
-    private static final String URL = "jdbc:mysql://localhost:3306/hospital";
+    public static final String INSERT_DEPARTMENT =
+            "INSERT INTO hospital.departments (title, number_of_chambers, number_of_beds, head_doctors_id) VALUES (?, ?, ?, ?)";
+    public static final String SELECT_LAST_INSERT_ID = "SELECT id FROM hospital.departments WHERE id = LAST_INSERT_ID()";
+    public static final String SELECT_ALL_BY_DEPARTMENT_ID =
+            "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id FROM hospital.departments WHERE id = ?";
+    public static final String SELECT_ALL_BY_TITLE =
+            "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id FROM hospital.departments WHERE title = ?";
+    public static final String SELECT_ALL_BY_HEAD_DOCTOR_ID =
+            "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id FROM hospital.departments WHERE head_doctors_id = ?";
 
+    private ConnectionPool connectionPool;
+
+    public DepartmentDaoImpl() {
+        this.connectionPool = ConnectionPool.getInstance();
+    }
+
+    @Override
     public Department insert(DepartmentDto departmentDto) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(
-                    "INSERT INTO departments (title, number_of_chambers, number_of_beds, head_doctors_id) " +
-                            "VALUES ('" + departmentDto.getTitle() + "', '" + departmentDto.getChambersNumber() + "', '"
-                            + departmentDto.getBedsNumber() + "', '" + departmentDto.getHeadDoctorId() + "')");
-            ResultSet resultSet = statement.executeQuery("SELECT id from chambers where id = LAST_INSERT_ID()");
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_DEPARTMENT);
+            preparedStatement.setString(1, departmentDto.getTitle());
+            preparedStatement.setInt(2, departmentDto.getChambersNumber());
+            preparedStatement.setInt(3, departmentDto.getBedsNumber());
+            preparedStatement.setInt(4, departmentDto.getHeadDoctorId());
+            preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery(SELECT_LAST_INSERT_ID);
             resultSet.next();
-            return new Department.Builder()
-                    .id(resultSet.getInt(1))
-                    .title(departmentDto.getTitle())
-                    .chambersNumber(departmentDto.getChambersNumber())
-                    .bedsNumber(departmentDto.getBedsNumber())
-                    .setHeadDoctorId(departmentDto.getHeadDoctorId())
-                    .build();
+            return DepartmentMapper.toDepartment(resultSet.getInt(1), departmentDto);
         }
     }
 
+    @Override
     public Department findById(int id) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id " +
-                            "from departments where id = " + id);
-            resultSet.next();
-            return new Department.Builder()
-                    .id(resultSet.getInt(1))
-                    .title(resultSet.getString(2))
-                    .chambersNumber(resultSet.getInt(3))
-                    .bedsNumber(resultSet.getInt(4))
-                    .setHeadDoctorId(resultSet.getInt(5))
-                    .build();
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_DEPARTMENT_ID);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return DepartmentMapper.toDepartment(resultSet);
         }
     }
 
+    @Override
     public Department findByTitle(String title) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id " +
-                            "from departments where title = " + title);
-            resultSet.next();
-            return new Department.Builder()
-                    .id(resultSet.getInt(1))
-                    .title(resultSet.getString(2))
-                    .chambersNumber(resultSet.getInt(3))
-                    .bedsNumber(resultSet.getInt(4))
-                    .setHeadDoctorId(resultSet.getInt(5))
-                    .build();
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_TITLE);
+            preparedStatement.setString(1, title);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return DepartmentMapper.toDepartment(resultSet);
         }
     }
 
+    @Override
     public Department findByHeadDoctorsId(int headDoctorId) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id " +
-                            "from departments where head_doctors_id = " + headDoctorId);
-            resultSet.next();
-            return new Department.Builder()
-                    .id(resultSet.getInt(1))
-                    .title(resultSet.getString(2))
-                    .chambersNumber(resultSet.getInt(3))
-                    .bedsNumber(resultSet.getInt(4))
-                    .setHeadDoctorId(resultSet.getInt(5))
-                    .build();
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_HEAD_DOCTOR_ID);
+            preparedStatement.setInt(1, headDoctorId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return DepartmentMapper.toDepartment(resultSet);
         }
     }
 }

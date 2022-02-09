@@ -5,14 +5,21 @@ import java.util.Date;
 public class Procedure {
     private int id;
     private int patientsId;
-    private Date completionDate;
+    private int completionDate;
     private String proceduresName;
     private int appointedDoctorsId;
-    private String access;
+    private int access;
     private int performedUserId;
     private String specification;
 
-    public Procedure(int id, int patientsId, Date completionDate, String proceduresName, int appointedDoctorsId, String access, int performedUserId, String specification) {
+    public Procedure(int id,
+                     int patientsId,
+                     int completionDate,
+                     String proceduresName,
+                     int appointedDoctorsId,
+                     int access,
+                     int performedUserId,
+                     String specification) {
         this.id = id;
         this.patientsId = patientsId;
         this.completionDate = completionDate;
@@ -39,11 +46,11 @@ public class Procedure {
         this.patientsId = patientsId;
     }
 
-    public Date getCompletionDate() {
+    public int getCompletionDate() {
         return completionDate;
     }
 
-    public void setCompletionDate(Date completionDate) {
+    public void setCompletionDate(int completionDate) {
         this.completionDate = completionDate;
     }
 
@@ -63,11 +70,11 @@ public class Procedure {
         this.appointedDoctorsId = appointedDoctorsId;
     }
 
-    public String getAccess() {
+    public int getAccess() {
         return access;
     }
 
-    public void setAccess(String access) {
+    public void setAccess(int access) {
         this.access = access;
     }
 
@@ -90,10 +97,10 @@ public class Procedure {
     public static class Builder {
         private int id;
         private int patientsId;
-        private Date completionDate;
+        private int completionDate;
         private String proceduresName;
         private int appointedDoctorsId;
-        private String access;
+        private int access;
         private int performedUserId;
         private String specification;
 
@@ -107,7 +114,7 @@ public class Procedure {
             return this;
         }
 
-        public Builder completionDate(Date completionDate) {
+        public Builder completionDate(int completionDate) {
             this.completionDate = completionDate;
             return this;
         }
@@ -122,7 +129,7 @@ public class Procedure {
             return this;
         }
 
-        public Builder access(String access) {
+        public Builder access(int access) {
             this.access = access;
             return this;
         }

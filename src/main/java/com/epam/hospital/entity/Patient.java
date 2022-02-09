@@ -11,14 +11,27 @@ public class Patient {
     private String patronymic;
     private String provisionalDiagnosis;
     private String address;
-    private Date birthday;
+    private int birthday;
     private String status;
     private String bloodType;
     private String allergy;
-    private Date receiptDate;
-    private Date dischargeDate;
+    private int receiptDate;
+    private int dischargeDate;
 
-    public Patient(int id, int chambersId, int doctorsId, String surname, String name, String patronymic, String provisionalDiagnosis, String address, Date birthday, String status, String bloodType, String allergy, Date receiptDate, Date dischargeDate) {
+    public Patient(int id,
+                   int chambersId,
+                   int doctorsId,
+                   String surname,
+                   String name,
+                   String patronymic,
+                   String provisionalDiagnosis,
+                   String address,
+                   int birthday,
+                   String status,
+                   String bloodType,
+                   String allergy,
+                   int receiptDate,
+                   int dischargeDate) {
         this.id = id;
         this.chambersId = chambersId;
         this.doctorsId = doctorsId;
@@ -99,11 +112,11 @@ public class Patient {
         this.address = address;
     }
 
-    public Date getBirthday() {
+    public int getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(int birthday) {
         this.birthday = birthday;
     }
 
@@ -131,19 +144,19 @@ public class Patient {
         this.allergy = allergy;
     }
 
-    public Date getReceiptDate() {
+    public int getReceiptDate() {
         return receiptDate;
     }
 
-    public void setReceiptDate(Date receiptDate) {
+    public void setReceiptDate(int receiptDate) {
         this.receiptDate = receiptDate;
     }
 
-    public Date getDischargeDate() {
+    public int getDischargeDate() {
         return dischargeDate;
     }
 
-    public void setDischargeDate(Date dischargeDate) {
+    public void setDischargeDate(int dischargeDate) {
         this.dischargeDate = dischargeDate;
     }
 
@@ -156,12 +169,12 @@ public class Patient {
         private String patronymic;
         private String provisionalDiagnosis;
         private String address;
-        private Date birthday;
+        private int birthday;
         private String status;
         private String bloodType;
         private String allergy;
-        private Date receiptDate;
-        private Date dischargeDate;
+        private int receiptDate;
+        private int dischargeDate;
 
         public Builder id(int id) {
             this.id = id;
@@ -203,7 +216,7 @@ public class Patient {
             return this;
         }
 
-        public Builder birthday(Date birthday) {
+        public Builder birthday(int birthday) {
             this.birthday = birthday;
             return this;
         }
@@ -223,12 +236,12 @@ public class Patient {
             return this;
         }
 
-        public Builder receiptDate(Date receiptDate) {
+        public Builder receiptDate(int receiptDate) {
             this.receiptDate = receiptDate;
             return this;
         }
 
-        public Builder dischargeDate(Date dischargeDate) {
+        public Builder dischargeDate(int dischargeDate) {
             this.dischargeDate = dischargeDate;
             return this;
         }

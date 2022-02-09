@@ -11,7 +11,15 @@ public class UserDto {
     private int phoneNumber;
     private int roleId;
 
-    public UserDto(String login, String password, int departmentsId, String surname, String name, String patronymic, String specialisation, int phoneNumber, int roleId) {
+    public UserDto(String login,
+                   String password,
+                   int departmentsId,
+                   String surname,
+                   String name,
+                   String patronymic,
+                   String specialisation,
+                   int phoneNumber,
+                   int roleId) {
         this.login = login;
         this.password = password;
         this.departmentsId = departmentsId;

@@ -1,209 +1,129 @@
 package com.epam.hospital.dao.impl;
 
+import com.epam.hospital.dao.ProcedureDao;
+import com.epam.hospital.dao.connectionpool.ConnectionPool;
+import com.epam.hospital.dao.mapper.ProcedureMapper;
 import com.epam.hospital.dto.ProcedureDto;
 import com.epam.hospital.entity.Procedure;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProcedureDaoImpl {
-    String USERNAME = "root";
-    String PASSWORD = "root";
-    String URL = "jdbc:mysql://localhost:3306/hospital";
+public class ProcedureDaoImpl implements ProcedureDao {
+    public static final String INSERT_PROCEDURE =
+            "INSERT INTO hospital.procedures (patients_id, date_of_completion, name_of_procedure, appointed_doctors_id," +
+                    "access, specification) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
+    public static final String SELECT_LAST_INSERT_ID = "SELECT id FROM hospital.procedures WHERE id = LAST_INSERT_ID()";
+    public static final String SELECT_ALL_BY_PROCEDURE_ID = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+            "performed_by_id, specification " +
+            "FROM hospital.procedures WHERE id = ?";
+    public static final String SELECT_ALL_BY_PATIENT_ID = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+            "performed_by_id, specification " +
+            "FROM hospital.procedures WHERE patients_id = ?";
+    public static final String SELECT_ALL_BY_COMPLETION_DATE = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+            "performed_by_id, specification " +
+            "FROM hospital.procedures WHERE date_of_completion = ?";
+    public static final String SELECT_ALL_BY_PROCEDURE_NAME = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+            "performed_by_id, specification " +
+            "FROM hospital.procedures WHERE name_of_procedure = ?";
+    public static final String SELECT_ALL_BY_APPOINTED_DOCTOR_ID = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+            "performed_by_id, specification " +
+            "FROM hospital.procedures WHERE appointed_doctors_id = ?";
+    public static final String SELECT_ALL_BY_PERFORMED_USER_ID = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+            "performed_by_id, specification " +
+            "FROM hospital.procedures WHERE performed_by_id = ?";
+    public static final String DELETE_BY_ID = "DELETE FROM hospital.procedures WHERE id = ?";
 
+    private ConnectionPool connectionPool;
+
+    public ProcedureDaoImpl() {
+        this.connectionPool = ConnectionPool.getInstance();
+    }
+
+    @Override
     public Procedure insert(ProcedureDto procedureDto) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(
-                    "INSERT INTO procedures (patients_id, date_of_completion, name_of_procedure, appointed_doctors," +
-                            "access, performed_by_id, specification) " +
-                            "VALUES ('" + procedureDto.getPatientsId() + "', '" + procedureDto.getCompletionDate() + "', '" +
-                            procedureDto.getProceduresName() + "', '" + procedureDto.getAppointedDoctorsId() + "', '" +
-                            procedureDto.getAccess() + "', '" + procedureDto.getPerformedUserId() + "', '" +
-                            procedureDto.getSpecification() + "')");
-            ResultSet resultSet = statement.executeQuery("SELECT id from chambers where id = LAST_INSERT_ID()");
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PROCEDURE);
+            preparedStatement.setInt(1, procedureDto.getPatientsId());
+            preparedStatement.setInt(2, procedureDto.getCompletionDate());
+            preparedStatement.setString(3, procedureDto.getProceduresName());
+            preparedStatement.setInt(4, procedureDto.getAppointedDoctorsId());
+            preparedStatement.setInt(5, procedureDto.getAccess());
+            preparedStatement.setString(6, procedureDto.getSpecification());
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.executeQuery(SELECT_LAST_INSERT_ID);
             resultSet.next();
-            return new Procedure.Builder()
-                    .id(resultSet.getInt(1))
-                    .patientsId(resultSet.getInt(2))
-                    .completionDate(resultSet.getDate(3))
-                    .proceduresName(resultSet.getString(4))
-                    .appointedDoctorsId(resultSet.getInt(5))
-                    .access(resultSet.getString(6))
-                    .performedUserId(resultSet.getInt(7))
-                    .specification(resultSet.getString(8))
-                    .build();
+            return ProcedureMapper.toProcedure(resultSet.getInt(1), procedureDto);
         }
     }
 
+    @Override
     public Procedure findById(int id) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors, access, " +
-                            "performed_by_id, specification " +
-                            "from procedures where id = " + id);
-            resultSet.next();
-            return new Procedure.Builder()
-                    .id(resultSet.getInt(1))
-                    .patientsId(resultSet.getInt(2))
-                    .completionDate(resultSet.getDate(3))
-                    .proceduresName(resultSet.getString(4))
-                    .appointedDoctorsId(resultSet.getInt(5))
-                    .access(resultSet.getString(6))
-                    .performedUserId(resultSet.getInt(7))
-                    .specification(resultSet.getString(8))
-                    .build();
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_PROCEDURE_ID);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return ProcedureMapper.toProcedure(resultSet);
         }
     }
 
+    @Override
     public List<Procedure> findByPatientsId(int patientsId) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors, access, " +
-                            "performed_by_id, specification " +
-                            "from procedures where patients_id = " + patientsId);
-            List<Procedure> procedures = new ArrayList<>();
-            while (resultSet.next()) {
-                procedures.add(new Procedure.Builder()
-                        .id(resultSet.getInt(1))
-                        .patientsId(resultSet.getInt(2))
-                        .completionDate(resultSet.getDate(3))
-                        .proceduresName(resultSet.getString(4))
-                        .appointedDoctorsId(resultSet.getInt(5))
-                        .access(resultSet.getString(6))
-                        .performedUserId(resultSet.getInt(7))
-                        .specification(resultSet.getString(8))
-                        .build());
-            }
-            return procedures;
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_PATIENT_ID);
+            preparedStatement.setInt(1, patientsId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return ProcedureMapper.toProcedureList(resultSet);
         }
     }
 
+    @Override
     public List<Procedure> findByCompletionDate(Date completionDate) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors, access, " +
-                            "performed_by_id, specification " +
-                            "from procedures where date_of_completion = " + completionDate);
-            List<Procedure> procedures = new ArrayList<>();
-            while (resultSet.next()) {
-                procedures.add(new Procedure.Builder()
-                        .id(resultSet.getInt(1))
-                        .patientsId(resultSet.getInt(2))
-                        .completionDate(resultSet.getDate(3))
-                        .proceduresName(resultSet.getString(4))
-                        .appointedDoctorsId(resultSet.getInt(5))
-                        .access(resultSet.getString(6))
-                        .performedUserId(resultSet.getInt(7))
-                        .specification(resultSet.getString(8))
-                        .build());
-            }
-            return procedures;
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_COMPLETION_DATE);
+            preparedStatement.setDate(1, (java.sql.Date) completionDate);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return ProcedureMapper.toProcedureList(resultSet);
         }
     }
 
+    @Override
     public List<Procedure> findByProceduresName(String proceduresName) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors, access, " +
-                            "performed_by_id, specification " +
-                            "from procedures where name_of_procedure = " + proceduresName);
-            List<Procedure> procedures = new ArrayList<>();
-            while (resultSet.next()) {
-                procedures.add(new Procedure.Builder()
-                        .id(resultSet.getInt(1))
-                        .patientsId(resultSet.getInt(2))
-                        .completionDate(resultSet.getDate(3))
-                        .proceduresName(resultSet.getString(4))
-                        .appointedDoctorsId(resultSet.getInt(5))
-                        .access(resultSet.getString(6))
-                        .performedUserId(resultSet.getInt(7))
-                        .specification(resultSet.getString(8))
-                        .build());
-            }
-            return procedures;
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_PROCEDURE_NAME);
+            preparedStatement.setString(1, proceduresName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return ProcedureMapper.toProcedureList(resultSet);
         }
     }
 
+    @Override
     public List<Procedure> findByAppointedDoctorsId(int appointedDoctorsId) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors, access, " +
-                            "performed_by_id, specification " +
-                            "from procedures where appointed_doctors = " + appointedDoctorsId);
-            List<Procedure> procedures = new ArrayList<>();
-            while (resultSet.next()) {
-                procedures.add(new Procedure.Builder()
-                        .id(resultSet.getInt(1))
-                        .patientsId(resultSet.getInt(2))
-                        .completionDate(resultSet.getDate(3))
-                        .proceduresName(resultSet.getString(4))
-                        .appointedDoctorsId(resultSet.getInt(5))
-                        .access(resultSet.getString(6))
-                        .performedUserId(resultSet.getInt(7))
-                        .specification(resultSet.getString(8))
-                        .build());
-            }
-            return procedures;
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_APPOINTED_DOCTOR_ID);
+            preparedStatement.setInt(1, appointedDoctorsId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return ProcedureMapper.toProcedureList(resultSet);
         }
     }
 
+    @Override
     public List<Procedure> findByPerformedUserId(int performedUserId) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors, access, " +
-                            "performed_by_id, specification " +
-                            "from procedures where performed_by_id = " + performedUserId);
-            List<Procedure> procedures = new ArrayList<>();
-            while (resultSet.next()) {
-                procedures.add(new Procedure.Builder()
-                        .id(resultSet.getInt(1))
-                        .patientsId(resultSet.getInt(2))
-                        .completionDate(resultSet.getDate(3))
-                        .proceduresName(resultSet.getString(4))
-                        .appointedDoctorsId(resultSet.getInt(5))
-                        .access(resultSet.getString(6))
-                        .performedUserId(resultSet.getInt(7))
-                        .specification(resultSet.getString(8))
-                        .build());
-            }
-            return procedures;
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_PERFORMED_USER_ID);
+            preparedStatement.setInt(1, performedUserId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return ProcedureMapper.toProcedureList(resultSet);
         }
     }
 
-    public List<Procedure> findByPerformedUserIdMy(int performedUserId) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors, access, " +
-                            "performed_by_id, specification " +
-                            "from procedures where performed_by_id = " + performedUserId);
-            return creator(resultSet);
+    @Override
+    public void deleteProcedure(int id) throws SQLException {
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID);
+            preparedStatement.setInt(1, id);
         }
-    }
-
-    private List<Procedure> creator(ResultSet resultSet) throws SQLException {
-        ArrayList<Procedure> procedures = new ArrayList<>();
-        while (resultSet.next()) {
-            procedures.add(new Procedure.Builder()
-                    .id(resultSet.getInt(1))
-                    .patientsId(resultSet.getInt(2))
-                    .completionDate(resultSet.getDate(3))
-                    .proceduresName(resultSet.getString(4))
-                    .appointedDoctorsId(resultSet.getInt(5))
-                    .access(resultSet.getString(6))
-                    .performedUserId(resultSet.getInt(7))
-                    .specification(resultSet.getString(8))
-                    .build());
-        }
-        return procedures;
     }
 }
