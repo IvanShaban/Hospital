@@ -10,11 +10,17 @@ import java.sql.*;
 import java.util.List;
 
 public class ChamberDaoImpl implements ChamberDao {
-    public static final String INSERT_CHAMBER = "INSERT INTO hospital.chambers (departments_id, number_of_beds) VALUES (?, ?)";
+    public static final String INSERT_CHAMBER_DTO = "INSERT INTO hospital.chambers (departments_id, number_of_beds) " +
+            "VALUES (?, ?)";
+    public static final String INSERT_CHAMBER = "INSERT INTO hospital.chambers (id, departments_id, number_of_beds) " +
+            "VALUES (?, ?, ?)";
     public static final String SELECT_LAST_INSERT_ID = "SELECT id FROM hospital.chambers WHERE id = LAST_INSERT_ID()";
-    public static final String SELECT_ALL_BY_CHAMBER_ID = "SELECT id, departments_id, number_of_beds FROM hospital.chambers WHERE id = ?";
-    public static final String SELECT_ALL_BY_DEPARTMENT_ID = "SELECT id, departments_id, number_of_beds FROM hospital.chambers WHERE departments_id = ?";
-    public static final String SELECT_ALL_CHAMBERS = "SELECT id, departments_id, number_of_beds FROM hospital.chambers";
+    public static final String SELECT_ALL_BY_CHAMBER_ID = "SELECT id, departments_id, number_of_beds " +
+            "FROM hospital.chambers WHERE id = ?";
+    public static final String SELECT_ALL_BY_DEPARTMENT_ID = "SELECT id, departments_id, number_of_beds " +
+            "FROM hospital.chambers WHERE departments_id = ?";
+    public static final String SELECT_ALL_CHAMBERS = "SELECT id, departments_id, number_of_beds FROM hospital.chambers " +
+            "ORDER BY departments_id";
 
     private ConnectionPool connectionPool;
 
@@ -25,13 +31,24 @@ public class ChamberDaoImpl implements ChamberDao {
     @Override
     public Chamber insert(ChamberDto chamberDto) throws SQLException {
         try (Connection connection = connectionPool.takeConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CHAMBER);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CHAMBER_DTO);
             preparedStatement.setInt(1, chamberDto.getDepartmentId());
             preparedStatement.setInt(2, chamberDto.getBedsNumber());
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.executeQuery(SELECT_LAST_INSERT_ID);
             resultSet.next();
             return ChamberMapper.toChamber(resultSet.getInt(1), chamberDto);
+        }
+    }
+
+    @Override
+    public void insert(Chamber chamber) throws SQLException {
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CHAMBER);
+            preparedStatement.setInt(1, chamber.getId());
+            preparedStatement.setInt(2, chamber.getDepartmentId());
+            preparedStatement.setInt(3, chamber.getBedsNumber());
+            preparedStatement.executeUpdate();
         }
     }
 

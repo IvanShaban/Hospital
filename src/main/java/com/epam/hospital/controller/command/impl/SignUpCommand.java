@@ -11,7 +11,6 @@ import com.epam.hospital.controller.constant.SessionAttribute;
 import com.epam.hospital.dto.UserDto;
 import com.epam.hospital.service.UserService;
 import com.epam.hospital.service.impl.UserServiceImpl;
-import com.google.protobuf.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,7 +34,7 @@ public class SignUpCommand implements Command {
         String name = request.getParameter(RequestParameter.USER_NAME);
         String patronymic = request.getParameter(RequestParameter.USER_PATRONYMIC);
         String specialisation = request.getParameter(RequestParameter.USER_SPECIALISATION);
-        int phoneNumber = Integer.parseInt(request.getParameter(RequestParameter.PHONE_NUMBER));
+        String phoneNumber = request.getParameter(RequestParameter.PHONE_NUMBER);
         int roleId = Integer.parseInt(request.getParameter(RequestParameter.USER_ROLE_ID));
         UserDto userDto = new UserDto(email, password, departmentId, surname, name, patronymic, specialisation, phoneNumber, roleId);
 

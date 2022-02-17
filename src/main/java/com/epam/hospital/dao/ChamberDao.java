@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ChamberDao extends Dao<Chamber, ChamberDto> {
     Chamber insert (ChamberDto chamberDto) throws SQLException;
+    void insert (Chamber chamber) throws SQLException;
     Chamber findById(int id) throws SQLException;
     List<Chamber> findByDepartmentId(int id) throws SQLException;
     List<Chamber> selectAllChambers() throws SQLException;

@@ -31,7 +31,7 @@ public class PatientMapper {
                 .build();
     }
 
-    public static Patient toPatient(int id, PatientDto patientDto) throws SQLException {
+    public static Patient toPatient(int id, PatientDto patientDto) {
         return new Patient.Builder()
                 .id(id)
                 .chambersId(patientDto.getChambersId())

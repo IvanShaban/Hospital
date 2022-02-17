@@ -1,20 +1,14 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Иван
-  Date: 01.02.2022
-  Time: 1:28
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <fmt:setLocale value="${sessionScope.locale != null ? sessionScope.locale : 'en'}"/>
 <fmt:setBundle basename="locale"/>
+
 <html>
 <head>
     <jsp:include page="templates/links.jsp" />
-    <title>Doctors</title>
+    <title><fmt:message key="doctors.doctors" /></title>
 </head>
 <body>
     <header>

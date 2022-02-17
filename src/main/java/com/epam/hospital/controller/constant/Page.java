@@ -24,9 +24,10 @@ public class Page {
     public static final String NEW_PROCEDURE_PAGE = "WEB-INF/pages/new-procedure.jsp";
     public static final String SEARCH_PROCEDURE_PAGE = "WEB-INF/pages/search-procedure.jsp";
     public static final String ACCOUNT_PROFILE_PAGE = "WEB-INF/pages/account-profile.jsp";
-    public static final String ACCOUNT_SETTINGS_PAGE = "WEB-INF/pages/account-settings.jsp";
+    public static final String CHAMBER_INFO_PAGE = "WEB-INF/pages/chamber-info.jsp";
     public static final String PROFILE_PAGE = "WEB-INF/pages/profile.jsp";
-    public static final String EDIT_PERSONAL_DATA_PAGE = "WEB-INF/pages/edit-personal-data.jsp";
+    public static final String UNFULFILLED_PROCEDURES_PAGE = "WEB-INF/pages/unfulfilled-procedures.jsp";
+    public static final String NEW_CHAMBER_PAGE = "WEB-INF/pages/new-chamber.jsp";
 
     private Page() {
     }

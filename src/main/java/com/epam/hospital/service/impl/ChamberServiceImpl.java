@@ -42,6 +42,20 @@ public class ChamberServiceImpl implements ChamberService {
     }
 
     @Override
+    public void insert (Chamber chamber) {
+        if (chamber.getId() < 1 || chamber.getBedsNumber() < 1 || chamber.getDepartmentId() < 1) {
+            logger.error("Chamber not valid " + chamber);
+            throw new NotValidException("Chamber not valid " + chamber);
+        }
+        try {
+            chamberDao.insert(chamber);
+        } catch (SQLException e) {
+            logger.error("Cannot insert chamber " + chamber, e);
+            throw new DaoException("Cannot insert chamber " + chamber, e);
+        }
+    }
+
+    @Override
     public Chamber findById(int id) {
         if (id < 1) {
             logger.error("Chamber id not valid " + id);

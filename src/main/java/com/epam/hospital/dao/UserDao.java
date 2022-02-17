@@ -16,4 +16,5 @@ public interface UserDao extends Dao<User, UserDto> {
     User login(String login) throws SQLException;
     User updateById(int userId, UserDto userDto) throws SQLException;
     List<User> selectAllUsers() throws SQLException;
+    void updateRoleById(int userId) throws SQLException;
 }

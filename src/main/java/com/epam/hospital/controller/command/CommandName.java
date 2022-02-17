@@ -20,21 +20,28 @@ public class CommandName {
     public static final String GOTO_NEW_PROCEDURE_PAGE_COMMAND = "goto-new-procedure-page";
     public static final String GOTO_SEARCH_PROCEDURE_PAGE_COMMAND = "goto-search-procedure-page";
     public static final String GOTO_ACCOUNT_PROFILE_PAGE_COMMAND = "goto-account-profile-page";
-    public static final String GOTO_ACCOUNT_SETTINGS_PAGE_COMMAND = "goto-account-settings-page";
+    public static final String GOTO_UNFULFILLED_PROCEDURES_PAGE_COMMAND = "goto-unfulfilled-procedures-page";
     public static final String GOTO_PROFILE_PAGE_COMMAND = "goto-profile-page";
     public static final String PROFILE_CHANGE_COMMAND = "profile-change-page";
     public static final String CREATE_NEW_PATIENT_COMMAND = "create-new-patient";
     public static final String CREATE_NEW_PROCEDURE_COMMAND = "create-new-procedure";
     public static final String SEARCH_PATIENT_COMMAND = "search-patient";
-    public static final String SEARCH_PROCEDURE_COMMAND = "search-procedure";
+    public static final String SEARCH_PROCEDURES_COMMAND = "search-procedures";
     public static final String GOTO_403_PAGE_COMMAND = "goto-403-page";
     public static final String GOTO_404_PAGE_COMMAND = "goto-404-page";
     public static final String GOTO_500_PAGE_COMMAND = "goto-500-page";
-    public static final String GOTO_EDIT_PERSONAL_DATA_PAGE_COMMAND = "goto-edit-personal-data-page";
     public static final String LOG_IN_COMMAND = "log-in";
     public static final String LOG_OUT_COMMAND = "log-out";
     public static final String SET_LOCALE_COMMAND = "set-locale";
     public static final String SIGN_UP_COMMAND = "sign-up";
+    public static final String GOTO_CHAMBER_INFO_PAGE_COMMAND = "goto-chamber-info-page";
+    public static final String WRITE_OUT_PATIENT_COMMAND = "write-out-patient";
+    public static final String WRITE_OUT_SEARCH_PATIENT_COMMAND = "write-out-search-patient";
+    public static final String GOTO_NEW_CHAMBER_PAGE_COMMAND = "goto-new-chamber-page";
+    public static final String CREATE_NEW_CHAMBER_COMMAND = "create-new-chamber";
+    public static final String GIVE_DOCTOR_RIGHTS_COMMAND = "give-doctor-rights";
+    public static final String EXECUTE_UNFULFILLED_PROCEDURE_COMMAND = "execute-unfulfilled-procedure";
+    public static final String EXECUTE_PATIENT_PROCEDURE_COMMAND = "execute-patient-procedure";
 
     private CommandName() {
     }

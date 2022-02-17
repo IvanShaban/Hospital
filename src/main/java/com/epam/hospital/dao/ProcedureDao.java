@@ -14,4 +14,6 @@ public interface ProcedureDao extends Dao<Procedure, ProcedureDto> {
     List<Procedure> findByAppointedDoctorsId(int appointedDoctorsId) throws SQLException;
     List<Procedure> findByPerformedUserId(int performedUserId) throws SQLException;
     void deleteProcedure(int id) throws SQLException;
+    List<Procedure> findUnfulfilledProcedures() throws SQLException;
+    void updatePerformedUserByProcedureId(int procedureId, int userId) throws SQLException;
 }

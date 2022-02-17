@@ -7,9 +7,6 @@ import com.epam.hospital.controller.command.impl.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Class that provides command with given name.
- */
 public class CommandFactory {
     private static final CommandFactory instance = new CommandFactory();
 
@@ -34,7 +31,6 @@ public class CommandFactory {
         put(CommandName.GOTO_NEW_PROCEDURE_PAGE_COMMAND, new GoToNewProcedurePageCommand());
         put(CommandName.GOTO_SEARCH_PROCEDURE_PAGE_COMMAND, new GoToSearchProcedurePageCommand());
         put(CommandName.GOTO_ACCOUNT_PROFILE_PAGE_COMMAND, new GoToAccountProfilePageCommand());
-        put(CommandName.GOTO_ACCOUNT_SETTINGS_PAGE_COMMAND, new GoToAccountSettingsPageCommand());
         put(CommandName.LOG_OUT_COMMAND, new LogOutCommand());
         put(CommandName.SET_LOCALE_COMMAND, new SetLocaleCommand());
         put(CommandName.SIGN_UP_COMMAND, new SignUpCommand());
@@ -43,27 +39,25 @@ public class CommandFactory {
         put(CommandName.CREATE_NEW_PATIENT_COMMAND, new CreateNewPatientCommand());
         put(CommandName.CREATE_NEW_PROCEDURE_COMMAND, new CreateNewProcedureCommand());
         put(CommandName.SEARCH_PATIENT_COMMAND, new SearchPatientCommand());
-        put(CommandName.SEARCH_PROCEDURE_COMMAND, new SearchProcedureCommand());
+        put(CommandName.SEARCH_PROCEDURES_COMMAND, new SearchProceduresCommand());
+        put(CommandName.GOTO_UNFULFILLED_PROCEDURES_PAGE_COMMAND, new GoToUnfulfilledProceduresCommand());
+        put(CommandName.GOTO_CHAMBER_INFO_PAGE_COMMAND, new GoToChamberInfoPageCommand());
+        put(CommandName.WRITE_OUT_PATIENT_COMMAND, new WriteOutPatientCommand());
+        put(CommandName.GOTO_NEW_CHAMBER_PAGE_COMMAND, new GoToNewChamberPageCommand());
+        put(CommandName.CREATE_NEW_CHAMBER_COMMAND, new CreateNewChamberCommand());
+        put(CommandName.GIVE_DOCTOR_RIGHTS_COMMAND, new GiveDoctorRightsCommand());
+        put(CommandName.EXECUTE_UNFULFILLED_PROCEDURE_COMMAND, new ExecuteUnfulfilledProcedureCommand());
+        put(CommandName.EXECUTE_PATIENT_PROCEDURE_COMMAND, new ExecutePatientProcedureCommand());
+        put(CommandName.WRITE_OUT_SEARCH_PATIENT_COMMAND, new WriteOutSearchPatientCommand());
     }};
 
     private CommandFactory() {
     }
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance of <code>CommandFactory</code>
-     */
     public static CommandFactory getInstance() {
         return instance;
     }
 
-    /**
-     * Gets command.
-     *
-     * @param commandName the command name
-     * @return the command with corresponding name
-     */
     public Command getCommand(String commandName) {
         return commands.get(commandName);
     }

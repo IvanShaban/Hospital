@@ -9,7 +9,7 @@ public class User {
     private String name;
     private String patronymic;
     private String specialisation;
-    private int phoneNumber;
+    private String phoneNumber;
     private int roleId;
 
     public User(int id,
@@ -20,7 +20,7 @@ public class User {
                 String name,
                 String patronymic,
                 String specialisation,
-                int phoneNumber,
+                String phoneNumber,
                 int roleId) {
         this.id = id;
         this.login = login;
@@ -98,11 +98,11 @@ public class User {
         this.specialisation = specialisation;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -123,7 +123,7 @@ public class User {
         private String name;
         private String patronymic;
         private String specialisation;
-        private int phoneNumber;
+        private String phoneNumber;
         private int roleId;
 
         public Builder id(int id) {
@@ -166,7 +166,7 @@ public class User {
             return this;
         }
 
-        public Builder phoneNumber(int phoneNumber) {
+        public Builder phoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;
             return this;
         }

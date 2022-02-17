@@ -5,13 +5,13 @@ import com.epam.hospital.dao.DepartmentDao;
 import com.epam.hospital.dao.impl.DepartmentDaoImpl;
 import com.epam.hospital.dto.DepartmentDto;
 import com.epam.hospital.entity.Department;
-import com.epam.hospital.service.ChamberService;
 import com.epam.hospital.service.DepartmentService;
 import com.epam.hospital.exception.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class DepartmentServiceImpl implements DepartmentService {
     private static final Logger logger = LogManager.getLogger(ContextListener.class);
@@ -82,6 +82,16 @@ public class DepartmentServiceImpl implements DepartmentService {
         } catch (SQLException e) {
             logger.error("Cannot find department by head doctor id " + headDoctorId, e);
             throw new DaoException("Cannot find department by head doctor id " + headDoctorId, e);
+        }
+    }
+
+    @Override
+    public List<Department> selectAllDepartments() {
+        try {
+            return departmentDao.selectAllDepartments();
+        } catch (SQLException e) {
+            logger.error("Cannot find departments ", e);
+            throw new DaoException("Cannot find departments ", e);
         }
     }
 }

@@ -12,6 +12,10 @@ public class SessionAttribute {
     public static final String USER_ROLE_ID = "user_role_id";
     public static final String USER_SURNAME = "user_surname";
     public static final String USER_DEPARTMENT_ID = "user_department_id";
+    public static final String DEPARTMENT_TITLE = "department_title";
+    public static final String CHAMBER = "chamber";
+    public static final String PATIENT_ID = "patient_id";
+    public static final String CHAMBER_FREE_BEDS = "chamber_free_beds";
 
     private SessionAttribute() {
     }

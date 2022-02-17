@@ -8,11 +8,11 @@ import com.epam.hospital.controller.constant.Page;
 import com.epam.hospital.controller.constant.RequestAttribute;
 import com.epam.hospital.controller.constant.RequestParameter;
 import com.epam.hospital.controller.constant.SessionAttribute;
-import com.epam.hospital.entity.Department;
+import com.epam.hospital.entity.Procedure;
 import com.epam.hospital.entity.User;
-import com.epam.hospital.service.DepartmentService;
+import com.epam.hospital.service.ProcedureService;
 import com.epam.hospital.service.UserService;
-import com.epam.hospital.service.impl.DepartmentServiceImpl;
+import com.epam.hospital.service.impl.ProcedureServiceImpl;
 import com.epam.hospital.service.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,22 +20,25 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-public class GoToAdminPersonalCommand implements Command {
+public class SearchProceduresCommand implements Command {
+
     @Override
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
+        ProcedureService procedureService = ProcedureServiceImpl.getInstance();
         UserService userService = UserServiceImpl.getInstance();
-        DepartmentService departmentService = DepartmentServiceImpl.getInstance();
+
+        int patientId = Integer.parseInt(request.getParameter(RequestParameter.PATIENT_ID));
+        session.setAttribute(SessionAttribute.PATIENT_ID, patientId);
+        List<Procedure> procedures = procedureService.findByPatientsId(patientId);
+        request.setAttribute(RequestAttribute.PROCEDURES, procedures);
 
         List<User> users = userService.selectAllUsers();
         request.setAttribute(RequestAttribute.USERS, users);
 
-        List<Department> departments = departmentService.selectAllDepartments();
-        request.setAttribute(RequestAttribute.DEPARTMENTS, departments);
-
         session.setAttribute(SessionAttribute.URL, "/controller?" +
-                RequestParameter.COMMAND + "=" + CommandName.GOTO_ADMIN_PERSONAL_COMMAND);
+                RequestParameter.COMMAND + "=" + CommandName.SEARCH_PROCEDURES_COMMAND);
 
-        return new CommandResult(Page.ADMIN_PERSONAL_PAGE, RoutingType.FORWARD);
+        return new CommandResult(Page.SEARCH_PROCEDURE_PAGE, RoutingType.FORWARD);
     }
 }

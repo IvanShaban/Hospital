@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ChamberService extends Service<Chamber, ChamberDto> {
     Chamber insert (ChamberDto chamberDto);
+    void insert (Chamber chamber);
     Chamber findById(int id);
     List<Chamber> findByDepartmentId(int id);
     List<Chamber> selectAllChambers();

@@ -5,6 +5,7 @@ import com.epam.hospital.dao.connectionpool.ConnectionPool;
 import com.epam.hospital.dao.mapper.PatientMapper;
 import com.epam.hospital.dto.PatientDto;
 import com.epam.hospital.entity.Patient;
+import com.epam.hospital.entity.PatientStatus;
 
 import java.sql.*;
 import java.util.Date;
@@ -12,41 +13,43 @@ import java.util.List;
 
 public class PatientDaoImpl implements PatientDao {
     public static final String INSERT_PATIENT =
-            "INSERT INTO hospital.patients (chambers_id, doctors_id, surname, name, patronymic, " +
-                    "provisional_diagnosis, address, birthday, status, blood_type, allergy, receipt_date, discharge_date) " +
+            "INSERT INTO hospital.patients (chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, " +
+                    "address, birthday, status, blood_type, allergy, receipt_date, discharge_date) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String SELECT_LAST_INSERT_ID = "SELECT id FROM hospital.patients WHERE id = LAST_INSERT_ID()";
-    public static final String SELECT_ALL_BY_PATIENT_ID = "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, " +
-            "birthday, status, blood_type, allergy, receipt_date, discharge_date " +
-            "FROM hospital.patients WHERE id = ?";
-    public static final String SELECT_ALL_BY_CHAMBER_ID = "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, " +
-            "address, birthday, status, blood_type, allergy, receipt_date, discharge_date " +
-            "FROM hospital.patients WHERE chambers_id = ?";
-    public static final String SELECT_ALL_BY_DOCTOR_ID = "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, " +
-            "birthday, status, blood_type, allergy, receipt_date, discharge_date " +
-            "FROM hospital.patients WHERE doctors_id = ?";
-    public static final String SELECT_ALL_BY_SURNAME = "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, " +
-            "birthday, status, blood_type, allergy, receipt_date, discharge_date " +
-            "FROM hospital.patients WHERE surname = ?";
-    public static final String SELECT_ALL_BY_PROVISIONAL_DIAGNOSIS = "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, " +
-            "birthday, status, blood_type, allergy, receipt_date, discharge_date " +
-            "FROM hospital.patients WHERE provisional_diagnosis = ?";
-    public static final String SELECT_ALL_BY_BIRTHDAY = "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, " +
-            "birthday, status, blood_type, allergy, receipt_date, discharge_date " +
-            "FROM hospital.patients WHERE birthday = ?";
-    public static final String SELECT_ALL_BY_STATUS = "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, " +
-            "birthday, status, blood_type, allergy, receipt_date, discharge_date " +
-            "FROM hospital.patients WHERE status = ?";
-    public static final String SELECT_ALL_BY_BLOOD_TYPE = "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, " +
-            "birthday, status, blood_type, allergy, receipt_date, discharge_date " +
-            "FROM hospital.patients WHERE blood_type = ?";
-    public static final String SELECT_ALL_BY_RECEIPT_DATE = "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, " +
-            "birthday, status, blood_type, allergy, receipt_date, discharge_date " +
-            "FROM hospital.patients WHERE receipt_date = ?";
-    public static final String SELECT_ALL_BY_DISCHARGE_DATE = "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, " +
-            "birthday, status, blood_type, allergy, receipt_date, discharge_date " +
-            "FROM hospital.patients WHERE discharge_date = ?";
+    public static final String SELECT_ALL_BY_PATIENT_ID =
+            "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, birthday, " +
+                    "status, blood_type, allergy, receipt_date, discharge_date FROM hospital.patients WHERE id = ?";
+    public static final String SELECT_ALL_BY_CHAMBER_ID =
+            "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, birthday, " +
+                    "status, blood_type, allergy, receipt_date, discharge_date FROM hospital.patients WHERE chambers_id = ?";
+    public static final String SELECT_ALL_BY_DOCTOR_ID =
+            "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, birthday, " +
+                    "status, blood_type, allergy, receipt_date, discharge_date FROM hospital.patients WHERE doctors_id = ?";
+    public static final String SELECT_ALL_BY_SURNAME =
+            "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, " +
+            "birthday, status, blood_type, allergy, receipt_date, discharge_date FROM hospital.patients WHERE surname = ?";
+    public static final String SELECT_ALL_BY_PROVISIONAL_DIAGNOSIS =
+            "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, birthday, " +
+                    "status, blood_type, allergy, receipt_date, discharge_date FROM hospital.patients " +
+                    "WHERE provisional_diagnosis = ?";
+    public static final String SELECT_ALL_BY_BIRTHDAY =
+            "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, birthday, " +
+                    "status, blood_type, allergy, receipt_date, discharge_date FROM hospital.patients WHERE birthday = ?";
+    public static final String SELECT_ALL_BY_STATUS =
+            "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, birthday, " +
+                    "status, blood_type, allergy, receipt_date, discharge_date FROM hospital.patients WHERE status = ?";
+    public static final String SELECT_ALL_BY_BLOOD_TYPE =
+            "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, birthday, " +
+                    "status, blood_type, allergy, receipt_date, discharge_date FROM hospital.patients WHERE blood_type = ?";
+    public static final String SELECT_ALL_BY_RECEIPT_DATE =
+            "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, birthday, " +
+                    "status, blood_type, allergy, receipt_date, discharge_date FROM hospital.patients WHERE receipt_date = ?";
+    public static final String SELECT_ALL_BY_DISCHARGE_DATE =
+            "SELECT id, chambers_id, doctors_id, surname, name, patronymic, provisional_diagnosis, address, birthday, " +
+                    "status, blood_type, allergy, receipt_date, discharge_date FROM hospital.patients WHERE discharge_date = ?";
     public static final String DELETE_BY_ID = "DELETE FROM hospital.patients WHERE id = ?";
+    public static final String UPDATE_STATUS_BY_ID = "UPDATE hospital.patients SET chambers_id = null, status = ? where id = ?";
 
     private ConnectionPool connectionPool;
 
@@ -183,8 +186,17 @@ public class PatientDaoImpl implements PatientDao {
         try (Connection connection = connectionPool.takeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID);
             preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
         }
     }
 
-
+    @Override
+    public void writeOutPatient(int id) throws SQLException {
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS_BY_ID);
+            preparedStatement.setString(1, String.valueOf(PatientStatus.DISCHARGE));
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        }
+    }
 }

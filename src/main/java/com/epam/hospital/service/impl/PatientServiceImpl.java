@@ -4,8 +4,9 @@ import com.epam.hospital.controller.ContextListener;
 import com.epam.hospital.dao.PatientDao;
 import com.epam.hospital.dao.impl.PatientDaoImpl;
 import com.epam.hospital.dto.PatientDto;
+import com.epam.hospital.entity.Chamber;
 import com.epam.hospital.entity.Patient;
-import com.epam.hospital.service.ChamberService;
+import com.epam.hospital.entity.PatientStatus;
 import com.epam.hospital.service.PatientService;
 import com.epam.hospital.exception.*;
 import org.apache.logging.log4j.LogManager;
@@ -54,7 +55,8 @@ public class PatientServiceImpl implements PatientService {
             return patientDao.findById(id);
         } catch (SQLException e) {
             logger.error("Cannot find patient by id " + id, e);
-            throw new DaoException("Cannot find patient by id " + id, e);
+//            throw new DaoException("Cannot find patient by id " + id, e);
+            return null;
         }
     }
 
@@ -165,6 +167,40 @@ public class PatientServiceImpl implements PatientService {
         }
         try {
             patientDao.deletePatient(id);
+        } catch (SQLException e) {
+            logger.error("Cannot find patient by id " + id, e);
+            throw new DaoException("Cannot find patient by id " + id, e);
+        }
+    }
+
+    @Override
+    public List<Chamber> findFreeBeds(List<Chamber> chambers) {
+        try {
+            List<Patient> patients = patientDao.findByStatus(String.valueOf(PatientStatus.ENABLE));
+            for (Chamber chamber : chambers) {
+                int freeBeds = chamber.getBedsNumber();
+                for (Patient patient : patients) {
+                    if (chamber.getId() == patient.getChambersId()) {
+                        freeBeds--;
+                    }
+                }
+                chamber.setBedsNumber(freeBeds);
+            }
+            return chambers;
+        } catch (SQLException e) {
+            logger.error("Cannot find patient by status ", e);
+            throw new DaoException("Cannot find patient by status ", e);
+        }
+    }
+
+    @Override
+    public void writeOutPatient(int id) {
+        if (id < 1) {
+            logger.error("Patient id not valid " + id);
+            throw new NotValidException("Patient id not valid " + id);
+        }
+        try {
+            patientDao.writeOutPatient(id);
         } catch (SQLException e) {
             logger.error("Cannot find patient by id " + id, e);
             throw new DaoException("Cannot find patient by id " + id, e);

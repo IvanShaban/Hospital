@@ -20,7 +20,7 @@ public final class ChamberMapper {
                 .build();
     }
 
-    public static Chamber toChamber(int id, ChamberDto chamberDto) throws SQLException {
+    public static Chamber toChamber(int id, ChamberDto chamberDto) {
         return new Chamber.Builder()
                 .id(id)
                 .departmentId(chamberDto.getDepartmentId())

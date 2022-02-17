@@ -5,8 +5,6 @@ import com.epam.hospital.dao.ProcedureDao;
 import com.epam.hospital.dao.impl.ProcedureDaoImpl;
 import com.epam.hospital.dto.ProcedureDto;
 import com.epam.hospital.entity.Procedure;
-import com.epam.hospital.service.ChamberService;
-import com.epam.hospital.service.PatientService;
 import com.epam.hospital.service.ProcedureService;
 import com.epam.hospital.exception.*;
 import org.apache.logging.log4j.LogManager;
@@ -132,6 +130,30 @@ public class ProcedureServiceImpl implements ProcedureService {
         } catch (SQLException e) {
             logger.error("Cannot find procedure by id " + id, e);
             throw new DaoException("Cannot find procedure by id " + id, e);
+        }
+    }
+
+    @Override
+    public List<Procedure> findUnfulfilledProcedures() {
+        try {
+            return procedureDao.findUnfulfilledProcedures();
+        } catch (SQLException e) {
+            logger.error("Cannot find unfulfilled procedures ", e);
+            throw new DaoException("Cannot find unfulfilled procedures ", e);
+        }
+    }
+
+    @Override
+    public void executeProcedure(int procedureId, int userId) {
+        if (procedureId < 1 || userId < 1) {
+            logger.error("Procedure or user id not valid");
+            throw new NotValidException("Procedure or user id not valid");
+        }
+        try {
+            procedureDao.updatePerformedUserByProcedureId(procedureId, userId);
+        } catch (SQLException e) {
+            logger.error("Cannot find procedure by id " + procedureId, e);
+            throw new DaoException("Cannot find procedure by id " + procedureId, e);
         }
     }
 }

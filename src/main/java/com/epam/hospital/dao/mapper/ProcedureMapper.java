@@ -25,7 +25,7 @@ public class ProcedureMapper {
                 .build();
     }
 
-    public static Procedure toProcedure(int id, ProcedureDto procedureDto) throws SQLException {
+    public static Procedure toProcedure(int id, ProcedureDto procedureDto) {
         return new Procedure.Builder()
                 .id(id)
                 .patientsId(procedureDto.getPatientsId())

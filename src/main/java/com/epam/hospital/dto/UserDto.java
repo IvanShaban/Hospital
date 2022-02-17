@@ -8,7 +8,7 @@ public class UserDto {
     private String name;
     private String patronymic;
     private String specialisation;
-    private int phoneNumber;
+    private String phoneNumber;
     private int roleId;
 
     public UserDto(String login,
@@ -18,7 +18,7 @@ public class UserDto {
                    String name,
                    String patronymic,
                    String specialisation,
-                   int phoneNumber,
+                   String phoneNumber,
                    int roleId) {
         this.login = login;
         this.password = password;
@@ -87,11 +87,11 @@ public class UserDto {
         this.specialisation = specialisation;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

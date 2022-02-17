@@ -1,7 +1,5 @@
 package com.epam.hospital.dto;
 
-import java.util.Date;
-
 public class ProcedureDto {
     private int patientsId;
     private int completionDate;

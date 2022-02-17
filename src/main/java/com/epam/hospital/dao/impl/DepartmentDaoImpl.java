@@ -7,17 +7,23 @@ import com.epam.hospital.dto.DepartmentDto;
 import com.epam.hospital.entity.Department;
 
 import java.sql.*;
+import java.util.List;
 
 public class DepartmentDaoImpl implements DepartmentDao {
     public static final String INSERT_DEPARTMENT =
-            "INSERT INTO hospital.departments (title, number_of_chambers, number_of_beds, head_doctors_id) VALUES (?, ?, ?, ?)";
+            "INSERT INTO hospital.departments (title, number_of_chambers, number_of_beds, head_doctors_id) " +
+                    "VALUES (?, ?, ?, ?)";
     public static final String SELECT_LAST_INSERT_ID = "SELECT id FROM hospital.departments WHERE id = LAST_INSERT_ID()";
     public static final String SELECT_ALL_BY_DEPARTMENT_ID =
             "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id FROM hospital.departments WHERE id = ?";
     public static final String SELECT_ALL_BY_TITLE =
-            "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id FROM hospital.departments WHERE title = ?";
+            "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id FROM hospital.departments " +
+                    "WHERE title = ?";
     public static final String SELECT_ALL_BY_HEAD_DOCTOR_ID =
-            "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id FROM hospital.departments WHERE head_doctors_id = ?";
+            "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id FROM hospital.departments " +
+                    "WHERE head_doctors_id = ?";
+    public static final String SELECT_ALL_DEPARTMENTS =
+            "SELECT id, title, number_of_chambers, number_of_beds, head_doctors_id FROM hospital.departments";
 
     private ConnectionPool connectionPool;
 
@@ -33,7 +39,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
             preparedStatement.setInt(2, departmentDto.getChambersNumber());
             preparedStatement.setInt(3, departmentDto.getBedsNumber());
             preparedStatement.setInt(4, departmentDto.getHeadDoctorId());
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.executeQuery(SELECT_LAST_INSERT_ID);
             resultSet.next();
             return DepartmentMapper.toDepartment(resultSet.getInt(1), departmentDto);
@@ -67,6 +73,15 @@ public class DepartmentDaoImpl implements DepartmentDao {
             preparedStatement.setInt(1, headDoctorId);
             ResultSet resultSet = preparedStatement.executeQuery();
             return DepartmentMapper.toDepartment(resultSet);
+        }
+    }
+
+    @Override
+    public List<Department> selectAllDepartments() throws SQLException {
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_DEPARTMENTS);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return DepartmentMapper.toDepartmentList(resultSet);
         }
     }
 }

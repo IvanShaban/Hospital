@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Иван
-  Date: 01.02.2022
-  Time: 1:30
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -14,11 +7,12 @@
 
 <fmt:setLocale value="${sessionScope.locale != null ? sessionScope.locale : 'en'}"/>
 <fmt:setBundle basename="locale"/>
+
 <html>
 <link rel="stylesheet" href="static/sign-up-style.css">
 <head>
     <jsp:include page="templates/links.jsp" />
-    <title>Sign-up</title>
+    <title><fmt:message key="sign_up.sign_up" /></title>
 </head>
 <body class="bg-light">
     <header>
@@ -27,9 +21,7 @@
     <div class="container">
         <main>
             <div class="py-5 text-center">
-<%--                <img class="d-block mx-auto mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">--%>
-                <h2>Checkout form</h2>
-<%--                <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>--%>
+                <h2><fmt:message key="sign_up.checkout_form" /></h2>
             </div>
 
             <div class="row g-5">
@@ -39,36 +31,36 @@
                         <input type="hidden" name="${RequestParameter.USER_ROLE_ID}" value="4">
                             <div class="row g-3">
                                 <div class="col-sm-6">
-                                    <label for="firstName" class="form-label">Name</label>
+                                    <label for="firstName" class="form-label"><fmt:message key="sign_up.name" /></label>
                                     <input type="text" class="form-control" id="firstName" placeholder="" name="${RequestParameter.USER_NAME}" value="" required>
                                     <div class="invalid-feedback">
-                                        Valid name is required.
+                                        <fmt:message key="sign_up.valid_name" />
                                     </div>
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <label for="lastName" class="form-label">Surname</label>
+                                    <label for="lastName" class="form-label"><fmt:message key="sign_up.surname" /></label>
                                     <input type="text" class="form-control" id="lastName" placeholder="" name="${RequestParameter.USER_SURNAME}" value="" required>
                                     <div class="invalid-feedback">
-                                        Valid surname is required.
+                                        <fmt:message key="sign_up.valid_surname" />
                                     </div>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="patronymic" class="form-label">Patronymic</label>
+                                    <label for="patronymic" class="form-label"><fmt:message key="sign_up.patronymic" /></label>
                                     <input type="text" class="form-control" id="patronymic" placeholder="" name="${RequestParameter.USER_PATRONYMIC}" value="" required>
                                     <div class="invalid-feedback">
-                                        Valid patronymic is required.
+                                        <fmt:message key="sign_up.valid_patronymic" />
                                     </div>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="phone-number" class="form-label">Phone number</label>
+                                    <label for="phone-number" class="form-label"><fmt:message key="sign_up.phone_number" /></label>
                                     <div class="input-group has-validation">
                                         <span class="input-group-text">+</span>
                                         <input type="tel" class="form-control" id="phone-number" placeholder="375291234567" name="${RequestParameter.PHONE_NUMBER}" value="" required>
                                         <div class="invalid-feedback">
-                                            Your phone number is required.
+                                            <fmt:message key="sign_up.valid_phone_number" />
                                         </div>
                                     </div>
                                 </div>
@@ -76,52 +68,48 @@
                                 <hr class="my-4">
 
                                 <div class="col-12">
-                                    <label for="email" class="form-label">Email</label>
+                                    <label for="email" class="form-label"><fmt:message key="sign_up.email" /></label>
                                     <input type="email" class="form-control" id="email" placeholder="you@example.com" name="${RequestParameter.EMAIL}" value="" required>
                                     <div class="invalid-feedback">
-                                        Please enter a valid email address.
+                                        <fmt:message key="sign_up.enter_valid_email" />
                                     </div>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="password" class="form-label">Password</label>
+                                    <label for="password" class="form-label"><fmt:message key="sign_up.password" /></label>
                                     <input type="password" class="form-control" id="password" placeholder="" name="${RequestParameter.PASSWORD}" value="" required>
                                     <div class="invalid-feedback">
-                                        Please enter a valid password.
+                                        <fmt:message key="sign_up.valid_password" />
                                     </div>
                                 </div>
 
                                 <hr class="my-4">
 
                                 <div class="col-md-5">
-                                    <label for="country" class="form-label">Department</label>
+                                    <label for="country" class="form-label"><fmt:message key="sign_up.department" /></label>
                                     <select class="form-select" id="country" name="${RequestParameter.DEPARTMENT_ID}" required>
-                                        <option value="">Choose...</option>
-                                        <option value="1">General surgical department</option>
-                                        <option value="2">Admission department</option>
-                                        <option value="3">Сardio surgery department</option>
-                                        <option value="4">Purulent surgical department</option>
-                                        <option value="5">Pediatric surgical department</option>
-                                        <option value="6">Resuscitation department</option>
-                                        <option value="7">Allergy department</option>
+                                        <option value=""><fmt:message key="sign_up.choose" /></option>
+                                        <c:forEach items="${requestScope.departments}" var="department">
+                                            <option value="${department.id}">${department.title}</option>
+                                        </c:forEach>
                                     </select>
                                     <div class="invalid-feedback">
-                                        Please select a valid department.
+                                        <fmt:message key="sign_up.valid_department" />
                                     </div>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="specialisation" class="form-label">Specialisation</label>
+                                    <label for="specialisation" class="form-label"><fmt:message key="sign_up.specialisation" /></label>
                                     <input type="text" class="form-control" id="specialisation" placeholder="" name="${RequestParameter.USER_SPECIALISATION}" value="" required>
                                     <div class="invalid-feedback">
-                                        Please enter your specialisation.
+                                        <fmt:message key="sign_up.valid_specialisation" />
                                     </div>
                                 </div>
                             </div>
 
                         <hr class="my-4">
 
-                        <button class="w-100 btn btn-primary btn-lg" type="submit">Sign up</button>
+                        <button class="w-100 btn btn-primary btn-lg" type="submit"><fmt:message key="sign_up.sign_up" /></button>
                     </form>
                 </div>
             </div>

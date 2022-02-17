@@ -13,4 +13,6 @@ public interface ProcedureService extends Service<Procedure, ProcedureDto> {
     List<Procedure> findByAppointedDoctorsId(int appointedDoctorsId);
     List<Procedure> findByPerformedUserId(int performedUserId);
     void deleteProcedure(int id);
+    List<Procedure> findUnfulfilledProcedures();
+    void executeProcedure(int procedureId, int userId);
 }

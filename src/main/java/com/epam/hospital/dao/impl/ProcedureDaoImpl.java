@@ -13,28 +13,32 @@ import java.util.List;
 public class ProcedureDaoImpl implements ProcedureDao {
     public static final String INSERT_PROCEDURE =
             "INSERT INTO hospital.procedures (patients_id, date_of_completion, name_of_procedure, appointed_doctors_id," +
-                    "access, specification) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
+                    "access, specification) VALUES (?, ?, ?, ?, ?, ?)";
     public static final String SELECT_LAST_INSERT_ID = "SELECT id FROM hospital.procedures WHERE id = LAST_INSERT_ID()";
-    public static final String SELECT_ALL_BY_PROCEDURE_ID = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
-            "performed_by_id, specification " +
-            "FROM hospital.procedures WHERE id = ?";
-    public static final String SELECT_ALL_BY_PATIENT_ID = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
-            "performed_by_id, specification " +
-            "FROM hospital.procedures WHERE patients_id = ?";
-    public static final String SELECT_ALL_BY_COMPLETION_DATE = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
-            "performed_by_id, specification " +
-            "FROM hospital.procedures WHERE date_of_completion = ?";
-    public static final String SELECT_ALL_BY_PROCEDURE_NAME = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
-            "performed_by_id, specification " +
-            "FROM hospital.procedures WHERE name_of_procedure = ?";
-    public static final String SELECT_ALL_BY_APPOINTED_DOCTOR_ID = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
-            "performed_by_id, specification " +
-            "FROM hospital.procedures WHERE appointed_doctors_id = ?";
-    public static final String SELECT_ALL_BY_PERFORMED_USER_ID = "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
-            "performed_by_id, specification " +
-            "FROM hospital.procedures WHERE performed_by_id = ?";
+    public static final String SELECT_ALL_BY_PROCEDURE_ID =
+            "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+                    "performed_by_id, specification FROM hospital.procedures WHERE id = ?";
+    public static final String SELECT_ALL_BY_PATIENT_ID =
+            "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+                    "performed_by_id, specification FROM hospital.procedures WHERE patients_id = ?";
+    public static final String SELECT_ALL_BY_COMPLETION_DATE =
+            "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+                    "performed_by_id, specification FROM hospital.procedures WHERE date_of_completion = ?";
+    public static final String SELECT_ALL_BY_PROCEDURE_NAME =
+            "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+                    "performed_by_id, specification FROM hospital.procedures WHERE name_of_procedure = ?";
+    public static final String SELECT_ALL_BY_APPOINTED_DOCTOR_ID =
+            "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+                    "performed_by_id, specification FROM hospital.procedures WHERE appointed_doctors_id = ?";
+    public static final String SELECT_ALL_BY_PERFORMED_USER_ID =
+            "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+                    "performed_by_id, specification FROM hospital.procedures WHERE performed_by_id = ?";
     public static final String DELETE_BY_ID = "DELETE FROM hospital.procedures WHERE id = ?";
+    public static final String SELECT_UNFULFILLED_PROCEDURES =
+            "SELECT id, patients_id, date_of_completion, name_of_procedure, appointed_doctors_id, access, " +
+                    "performed_by_id, specification FROM hospital.procedures WHERE performed_by_id IS NULL " +
+                    "ORDER BY patients_id";
+    public static final String UPDATE_PERFORMED_ID = "UPDATE hospital.procedures SET performed_by_id = ? WHERE id = ?";
 
     private ConnectionPool connectionPool;
 
@@ -124,6 +128,26 @@ public class ProcedureDaoImpl implements ProcedureDao {
         try (Connection connection = connectionPool.takeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID);
             preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    @Override
+    public List<Procedure> findUnfulfilledProcedures() throws SQLException {
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_UNFULFILLED_PROCEDURES);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return ProcedureMapper.toProcedureList(resultSet);
+        }
+    }
+
+    @Override
+    public void updatePerformedUserByProcedureId(int procedureId, int userId) throws SQLException {
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PERFORMED_ID);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, procedureId);
+            preparedStatement.executeUpdate();
         }
     }
 }

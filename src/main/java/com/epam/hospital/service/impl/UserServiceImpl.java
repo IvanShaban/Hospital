@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDao.login(login);
         } catch (SQLException e) {
-            return null;
+            throw new DaoException("Cannot find user by login " + login, e);
         }
     }
 
@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDao.updateById(userId, userDto);
         } catch (SQLException e) {
-            return null;
+            throw new DaoException("Cannot find user by id " + userId, e);
         }
     }
 
@@ -179,7 +179,16 @@ public class UserServiceImpl implements UserService {
         try {
             return userDao.selectAllUsers();
         } catch (SQLException e) {
-            return null;
+            throw new DaoException("Cannot find users ", e);
+        }
+    }
+
+    @Override
+    public void updateRoleById(int userId) {
+        try {
+            userDao.updateRoleById(userId);
+        } catch (SQLException e) {
+            throw new DaoException("Cannot find user by id " + userId, e);
         }
     }
 }

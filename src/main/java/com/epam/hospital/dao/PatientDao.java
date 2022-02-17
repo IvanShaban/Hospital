@@ -18,4 +18,5 @@ public interface PatientDao extends Dao<Patient, PatientDto> {
     List<Patient> findByReceiptDate(Date receiptDate) throws SQLException;
     List<Patient> findByDischargeDate(Date dischargeDate) throws SQLException;
     void deletePatient(int id) throws SQLException;
+    void writeOutPatient(int id) throws SQLException;
 }

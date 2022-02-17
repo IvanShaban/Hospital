@@ -16,4 +16,5 @@ public interface UserService extends Service<User, UserDto> {
     User findByLogin(String login);
     User updateById(int userId, UserDto userDto);
     List<User> selectAllUsers();
+    void updateRoleById(int userId);
 }

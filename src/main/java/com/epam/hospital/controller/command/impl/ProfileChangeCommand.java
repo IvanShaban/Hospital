@@ -26,15 +26,15 @@ public class ProfileChangeCommand implements Command {
         HttpSession session = request.getSession();
         UserService userService = UserServiceImpl.getInstance();
 
-        int userId = Integer.parseInt(request.getParameter(RequestParameter.USER_ID));
         String email = request.getParameter(RequestParameter.EMAIL);
-        String password = request.getParameter(RequestParameter.PASSWORD);
+        int userId = Integer.parseInt(request.getParameter(RequestParameter.USER_ID));
         int departmentId = Integer.parseInt(request.getParameter(RequestParameter.DEPARTMENT_ID));
+        String password = request.getParameter(RequestParameter.PASSWORD);
         String surname = request.getParameter(RequestParameter.USER_SURNAME);
         String name = request.getParameter(RequestParameter.USER_NAME);
-        String patronymic = request.getParameter(RequestParameter.USER_PATRONYMIC);
         String specialisation = request.getParameter(RequestParameter.USER_SPECIALISATION);
-        int phoneNumber = Integer.parseInt(request.getParameter(RequestParameter.PHONE_NUMBER));
+        String patronymic = request.getParameter(RequestParameter.USER_PATRONYMIC);
+        String phoneNumber = request.getParameter(RequestParameter.PHONE_NUMBER);
         int roleId = Integer.parseInt(request.getParameter(RequestParameter.USER_ROLE_ID));
         UserDto userDto = new UserDto(email, password, departmentId, surname, name, patronymic, specialisation, phoneNumber, roleId);
 

@@ -1,7 +1,5 @@
 package com.epam.hospital.entity;
 
-import java.util.Date;
-
 public class Procedure {
     private int id;
     private int patientsId;

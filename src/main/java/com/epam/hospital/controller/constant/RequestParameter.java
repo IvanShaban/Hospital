@@ -27,6 +27,9 @@ public class RequestParameter {
     public static final String USER_SURNAME = "user-surname";
     public static final String USER_PATRONYMIC = "user-patronymic";
     public static final String USER_ROLE_ID = "user-role-id";
+    public static final String CHAMBER_ID = "chamber-id";
+    public static final String CHAMBER_BEDS_NUMBER = "chamber-beds-number";
+
 
     private RequestParameter() {
     }

@@ -13,20 +13,36 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
     public static final String INSERT_USER =
             "INSERT INTO hospital.users (login, password, departments_id, surname, name, patronymic, specialisation," +
-                    "phone_number, roles_id) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    public static final String UPDATE_USER_BY_ID =
-            "UPDATE hospital.users SET login = ?, password = ?, departments_id = ?, surname = ?, name = ?, patronymic = ?, specialisation = ?, phone_number = ?, roles_id = ? WHERE id = ?";
+                    "phone_number, roles_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static final String UPDATE_USER_BY_ID = "UPDATE hospital.users SET login = ?, password = ?, departments_id = ?, " +
+            "surname = ?, name = ?, patronymic = ?, specialisation = ?, phone_number = ?, roles_id = ? WHERE id = ?";
+    public static final String UPDATE_USER_ROLE_BY_ID = "UPDATE hospital.users SET roles_id = 3 WHERE id = ?";
     public static final String SELECT_LAST_INSERT_ID = "SELECT id FROM hospital.users WHERE id = LAST_INSERT_ID()";
-    public static final String SELECT_USER_BY_ID = "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, roles_id FROM hospital.users WHERE id = ?";
-    public static final String SELECT_USER_BY_DEPARTMENT_ID = "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, roles_id FROM hospital.users WHERE departments_id = ?";
-    public static final String SELECT_USER_BY_SURNAME = "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, roles_id FROM hospital.users WHERE surname = ?";
-    public static final String SELECT_USER_BY_SPECIALISATION = "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, roles_id FROM hospital.users WHERE specialisation = ?";
-    public static final String SELECT_USER_BY_PHONE_NUMBER = "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, roles_id FROM hospital.users WHERE phone_number = ?";
-    public static final String SELECT_USER_BY_ROLE_ID = "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, roles_id FROM hospital.users WHERE roles_id = ?";
+    public static final String SELECT_USER_BY_ID =
+            "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, " +
+                    "roles_id FROM hospital.users WHERE id = ?";
+    public static final String SELECT_USER_BY_DEPARTMENT_ID =
+            "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, " +
+                    "roles_id FROM hospital.users WHERE departments_id = ?";
+    public static final String SELECT_USER_BY_SURNAME =
+            "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, " +
+                    "roles_id FROM hospital.users WHERE surname = ?";
+    public static final String SELECT_USER_BY_SPECIALISATION =
+            "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, " +
+                    "roles_id FROM hospital.users WHERE specialisation = ?";
+    public static final String SELECT_USER_BY_PHONE_NUMBER =
+            "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, " +
+                    "roles_id FROM hospital.users WHERE phone_number = ?";
+    public static final String SELECT_USER_BY_ROLE_ID =
+            "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, " +
+                    "roles_id FROM hospital.users WHERE roles_id = ?";
     public static final String DELETE_BY_ID = "DELETE FROM hospital.users WHERE id = ?";
-    public static final String SELECT_USER_BY_LOGIN = "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, roles_id FROM hospital.users WHERE login = ?";
-    public static final String SELECT_ALL_FROM_TABLE = "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, roles_id FROM hospital.users";
+    public static final String SELECT_USER_BY_LOGIN =
+            "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, " +
+                    "roles_id FROM hospital.users WHERE login = ?";
+    public static final String SELECT_ALL_USERS_FROM_TABLE =
+            "SELECT id, login, password, departments_id, surname, name, patronymic, specialisation, phone_number, " +
+                    "roles_id FROM hospital.users ORDER BY departments_id";
 
     private ConnectionPool connectionPool;
 
@@ -45,7 +61,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(5, userDto.getName());
             preparedStatement.setString(6, userDto.getPatronymic());
             preparedStatement.setString(7, userDto.getSpecialisation());
-            preparedStatement.setInt(8, userDto.getPhoneNumber());
+            preparedStatement.setString(8, userDto.getPhoneNumber());
             preparedStatement.setInt(9, userDto.getRoleId());
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.executeQuery(SELECT_LAST_INSERT_ID);
@@ -65,7 +81,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(5, userDto.getName());
             preparedStatement.setString(6, userDto.getPatronymic());
             preparedStatement.setString(7, userDto.getSpecialisation());
-            preparedStatement.setInt(8, userDto.getPhoneNumber());
+            preparedStatement.setString(8, userDto.getPhoneNumber());
             preparedStatement.setInt(9, userDto.getRoleId());
             preparedStatement.setInt(10, userId);
             preparedStatement.executeUpdate();
@@ -76,9 +92,18 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> selectAllUsers() throws SQLException {
         try (Connection connection = connectionPool.takeConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_FROM_TABLE);
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS_FROM_TABLE);
             ResultSet resultSet = preparedStatement.executeQuery();
             return UserMapper.toUserList(resultSet);
+        }
+    }
+
+    @Override
+    public void updateRoleById(int userId) throws SQLException {
+        try (Connection connection = connectionPool.takeConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_ROLE_BY_ID);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.executeUpdate();
         }
     }
 
@@ -147,6 +172,7 @@ public class UserDaoImpl implements UserDao {
         try (Connection connection = connectionPool.takeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID);
             preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
         }
     }
 

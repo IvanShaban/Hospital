@@ -22,12 +22,12 @@ public class UserMapper {
                 .name(resultSet.getString(6))
                 .patronymic(resultSet.getString(7))
                 .specialisation(resultSet.getString(8))
-                .phoneNumber(resultSet.getInt(9))
+                .phoneNumber(resultSet.getString(9))
                 .roleId(resultSet.getInt(10))
                 .build();
     }
 
-    public static User toUser(int id, UserDto userDto) throws SQLException {
+    public static User toUser(int id, UserDto userDto) {
         return new User.Builder()
                 .id(id)
                 .login(userDto.getLogin())
@@ -54,7 +54,7 @@ public class UserMapper {
                     .name(resultSet.getString(6))
                     .patronymic(resultSet.getString(7))
                     .specialisation(resultSet.getString(8))
-                    .phoneNumber(resultSet.getInt(9))
+                    .phoneNumber(resultSet.getString(9))
                     .roleId(resultSet.getInt(10))
                     .build());
         }

@@ -1,6 +1,7 @@
 package com.epam.hospital.service;
 
 import com.epam.hospital.dto.PatientDto;
+import com.epam.hospital.entity.Chamber;
 import com.epam.hospital.entity.Patient;
 
 import java.util.Date;
@@ -17,4 +18,6 @@ public interface PatientService extends Service<Patient, PatientDto> {
     List<Patient> findByReceiptDate(Date receiptDate);
     List<Patient> findByDischargeDate(Date dischargeDate);
     void deletePatient(int id);
+    List<Chamber> findFreeBeds(List<Chamber> chambers);
+    void writeOutPatient(int id);
 }
