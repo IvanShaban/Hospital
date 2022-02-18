@@ -49,6 +49,7 @@ public class CommandFactory {
         put(CommandName.EXECUTE_UNFULFILLED_PROCEDURE_COMMAND, new ExecuteUnfulfilledProcedureCommand());
         put(CommandName.EXECUTE_PATIENT_PROCEDURE_COMMAND, new ExecutePatientProcedureCommand());
         put(CommandName.WRITE_OUT_SEARCH_PATIENT_COMMAND, new WriteOutSearchPatientCommand());
+        put(CommandName.GIVE_DOCTOR_RIGHTS_BY_HEAD_COMMAND, new GiveDoctorRightsByHeadCommand());
     }};
 
     private CommandFactory() {

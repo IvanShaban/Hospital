@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="com.epam.hospital.controller.constant.RequestParameter" %>
+<%@ page import="com.epam.hospital.controller.command.CommandName" %>
 
 <fmt:setLocale value="${sessionScope.locale != null ? sessionScope.locale : 'en'}"/>
 <fmt:setBundle basename="locale"/>
@@ -23,8 +24,6 @@
         <div class="row g-5">
             <div class="col-md-7 col-lg-8">
                 <form class="needs-validation" action="controller" method="get" novalidate>
-                    <input type="hidden" name="${RequestParameter.USER_ROLE_ID}" value="${sessionScope.user_role_id}">
-                    <input type="hidden" name="${RequestParameter.USER_ID}" value="${sessionScope.user_id}">
                     <div class="row g-3">
                         <table class="table table-hover">
                             <thead>
@@ -65,7 +64,7 @@
                                         <td>${user.phoneNumber}</td>
                                         <c:choose>
                                             <c:when test="${user.roleId == 4}">
-                                                <td><a href="#"><fmt:message key="department_personal.doctor" /></a></td>
+                                                <td><a href="?${RequestParameter.COMMAND}=${CommandName.GIVE_DOCTOR_RIGHTS_BY_HEAD_COMMAND}&${RequestParameter.USER_ID}=${user.id}"><fmt:message key="department_personal.doctor" /></a></td>
                                             </c:when>
                                             <c:otherwise>
                                                 <td></td>

@@ -20,58 +20,58 @@
         <jsp:include page="templates/header.jsp"/>
     </header>
     <main>
-    <div class="d-flex">
+        <div class="d-flex">
         <jsp:include page="templates/sidebar.jsp"/>
-        <div class="d-flex flex-wrap">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-3 col-xl-3">
-                        <div class="card bg-c-blue order-card">
-                            <div class="card-block">
-                                <h6 class="m-b-20">${sessionScope.department_title}</h6>
-                                <h2 class="text-right"><i
-                                        class="fa fa-cart-plus f-left"></i><span>${sessionScope.chamber.id}</span></h2>
-                                <p class="m-b-0"><fmt:message key="chamber_info.free_beds" /><span class="f-right">${sessionScope.chamber_free_beds}</span></p>
+            <div class="d-flex flex-wrap">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3 col-xl-3">
+                            <div class="card bg-c-blue order-card">
+                                <div class="card-block">
+                                    <h6 class="m-b-20">${sessionScope.department_title}</h6>
+                                    <h2 class="text-right"><i
+                                            class="fa fa-cart-plus f-left"></i><span>${sessionScope.chamber.id}</span></h2>
+                                    <p class="m-b-0"><fmt:message key="chamber_info.free_beds" /><span class="f-right">${sessionScope.chamber_free_beds}</span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row g-5">
-                <div class="col-md-7 col-lg-8">
-                    <form class="needs-validation" action="controller" method="post" novalidate>
-                        <div class="row g-3">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col"><fmt:message key="chamber_info.card_number" /></th>
-                                        <th scope="col"><fmt:message key="chamber_info.surname" /></th>
-                                        <th scope="col"><fmt:message key="chamber_info.name" /></th>
-                                        <th scope="col"><fmt:message key="chamber_info.patronymic" /></th>
-                                        <th scope="col"><fmt:message key="chamber_info.provisional_diagnosis" /></th>
-                                        <th scope="col"><fmt:message key="chamber_info.writing_out" /></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach items="${requestScope.patients}" var="patient">
+                <div class="row g-5">
+                    <div class="col-md-7 col-lg-8">
+                        <form class="needs-validation" action="controller" method="post" novalidate>
+                            <div class="row g-3">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>${patient.id}</td>
-                                            <td>${patient.surname}</td>
-                                            <td>${patient.name}</td>
-                                            <td>${patient.patronymic}</td>
-                                            <td>${patient.provisionalDiagnosis}</td>
-                                            <td><a href="?${RequestParameter.COMMAND}=${CommandName.WRITE_OUT_PATIENT_COMMAND}&${RequestParameter.PATIENT_ID}=${patient.id}"><fmt:message key="chamber_info.write_out" /></a></td>
+                                            <th scope="col"><fmt:message key="chamber_info.card_number" /></th>
+                                            <th scope="col"><fmt:message key="chamber_info.surname" /></th>
+                                            <th scope="col"><fmt:message key="chamber_info.name" /></th>
+                                            <th scope="col"><fmt:message key="chamber_info.patronymic" /></th>
+                                            <th scope="col"><fmt:message key="chamber_info.provisional_diagnosis" /></th>
+                                            <th scope="col"><fmt:message key="chamber_info.writing_out" /></th>
                                         </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </form>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${requestScope.patients}" var="patient">
+                                            <tr>
+                                                <td>${patient.id}</td>
+                                                <td>${patient.surname}</td>
+                                                <td>${patient.name}</td>
+                                                <td>${patient.patronymic}</td>
+                                                <td>${patient.provisionalDiagnosis}</td>
+                                                <td><a href="?${RequestParameter.COMMAND}=${CommandName.WRITE_OUT_PATIENT_COMMAND}&${RequestParameter.PATIENT_ID}=${patient.id}"><fmt:message key="chamber_info.write_out" /></a></td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
     <footer>
         <jsp:include page="templates/footer.jsp"/>
     </footer>

@@ -40,6 +40,7 @@ public class CommandName {
     public static final String GOTO_NEW_CHAMBER_PAGE_COMMAND = "goto-new-chamber-page";
     public static final String CREATE_NEW_CHAMBER_COMMAND = "create-new-chamber";
     public static final String GIVE_DOCTOR_RIGHTS_COMMAND = "give-doctor-rights";
+    public static final String GIVE_DOCTOR_RIGHTS_BY_HEAD_COMMAND = "give-doctor-rights-by-head";
     public static final String EXECUTE_UNFULFILLED_PROCEDURE_COMMAND = "execute-unfulfilled-procedure";
     public static final String EXECUTE_PATIENT_PROCEDURE_COMMAND = "execute-patient-procedure";
 

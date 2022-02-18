@@ -75,6 +75,15 @@
                                 </c:forEach>
                             </tbody>
                         </table>
+                        <div class="pages-navigation">
+                            <c:if test="${requestScope.current_page != 1}">
+                                <a href="?${RequestParameter.COMMAND}=${CommandName.GOTO_ADMIN_PERSONAL_COMMAND}&${RequestParameter.PAGE}=${requestScope.current_page - 1}">${requestScope.current_page - 1}</a>
+                            </c:if>
+                            &nbsp;<span><fmt:message key="admin_personal.page" /> ${requestScope.current_page} <fmt:message key="admin_personal.of" /> ${requestScope.pages_count}</span>&nbsp;
+                            <c:if test="${requestScope.current_page < requestScope.pages_count}">
+                                <a href="?${RequestParameter.COMMAND}=${CommandName.GOTO_ADMIN_PERSONAL_COMMAND}&${RequestParameter.PAGE}=${requestScope.current_page + 1}">${requestScope.current_page + 1}</a>
+                            </c:if>
+                        </div>
                     </div>
                 </form>
             </div>

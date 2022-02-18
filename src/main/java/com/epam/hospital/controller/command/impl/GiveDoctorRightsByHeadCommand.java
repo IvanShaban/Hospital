@@ -8,7 +8,6 @@ import com.epam.hospital.controller.constant.Page;
 import com.epam.hospital.controller.constant.RequestAttribute;
 import com.epam.hospital.controller.constant.RequestParameter;
 import com.epam.hospital.controller.constant.SessionAttribute;
-import com.epam.hospital.entity.Chamber;
 import com.epam.hospital.entity.Department;
 import com.epam.hospital.entity.User;
 import com.epam.hospital.service.DepartmentService;
@@ -19,42 +18,27 @@ import com.epam.hospital.service.impl.UserServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class GoToAdminPersonalCommand implements Command {
+public class GiveDoctorRightsByHeadCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        UserService userService = UserServiceImpl.getInstance();
         DepartmentService departmentService = DepartmentServiceImpl.getInstance();
+        UserService userService = UserServiceImpl.getInstance();
 
-        List<User> allUsers = userService.selectAllUsers();
+        int userId = Integer.parseInt(request.getParameter(RequestParameter.USER_ID));
+        userService.updateRoleById(userId);
 
+        int departmentId = (int) session.getAttribute(SessionAttribute.USER_DEPARTMENT_ID);
+        List<User> users = userService.findByDepartmentsId(departmentId);
+        request.setAttribute(RequestAttribute.USERS, users);
 
         List<Department> departments = departmentService.selectAllDepartments();
         request.setAttribute(RequestAttribute.DEPARTMENTS, departments);
 
-        int page = Integer.parseInt(Optional.ofNullable(request.getParameter(RequestParameter.PAGE)).orElse("1"));
-        int itemsOnPage = 8;
-        int itemsCount = allUsers.size();
-        int pagesCount = itemsCount / itemsOnPage;
-        if (itemsCount % itemsOnPage != 0) {
-            pagesCount++;
-        }
-        List<User> usersOnPage = new ArrayList<>();
-        for (int i = itemsOnPage * (page - 1); i < itemsOnPage * page; i++) {
-            if (i < allUsers.size()) {
-                usersOnPage.add(allUsers.get(i));
-            }
-        }
-        request.setAttribute(RequestAttribute.CURRENT_PAGE, page);
-        request.setAttribute(RequestAttribute.PAGES_COUNT, pagesCount);
-        request.setAttribute(RequestAttribute.USERS, usersOnPage);
-
         session.setAttribute(SessionAttribute.URL, "/controller?" +
-                RequestParameter.COMMAND + "=" + CommandName.GOTO_ADMIN_PERSONAL_COMMAND);
+                RequestParameter.COMMAND + "=" + CommandName.GIVE_DOCTOR_RIGHTS_COMMAND);
 
         return new CommandResult(Page.ADMIN_PERSONAL_PAGE, RoutingType.FORWARD);
     }

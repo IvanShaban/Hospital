@@ -11,6 +11,8 @@ public class RequestAttribute {
     public static final String USER_ID = "user_id";
     public static final String DEPARTMENTS = "departments";
     public static final String DEPARTMENT = "department";
+    public static final String CURRENT_PAGE = "current_page";
+    public static final String PAGES_COUNT = "pages_count";
 
     private RequestAttribute() {
     }
